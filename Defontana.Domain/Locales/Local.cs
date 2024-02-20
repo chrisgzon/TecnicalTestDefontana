@@ -1,6 +1,6 @@
 ﻿namespace Defontana.Domain.Locales
 {
-    internal class Local : ILocal
+    public sealed class Local : ILocal
     {
         public long IdLocal { get; set; }
         public string Nombre { get; set; } = string.Empty;

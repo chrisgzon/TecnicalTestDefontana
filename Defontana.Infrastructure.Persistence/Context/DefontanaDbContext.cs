@@ -1,33 +1,21 @@
 ﻿using Defontana.Infrastructure.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Defontana.Infrastructure.Persistence.Context
 {
     public partial class DefontanaDbContext : DbContext
     {
-        public DefontanaDbContext()
-        {
-        }
-
-        public DefontanaDbContext(DbContextOptions<DefontanaDbContext> options)
-            : base(options)
-        {
-        }
+        public DefontanaDbContext(
+            DbContextOptions<DefontanaDbContext> dbContextOptions)
+            : base(dbContextOptions)
+        {}
 
         public virtual DbSet<Local> Locals { get; set; } = null!;
         public virtual DbSet<Marca> Marcas { get; set; } = null!;
         public virtual DbSet<Producto> Productos { get; set; } = null!;
         public virtual DbSet<VentaDetalle> VentaDetalles { get; set; } = null!;
-        public virtual DbSet<Venta> Venta { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=lab-defontana-202310.caporvnn6sbh.us-east-1.rds.amazonaws.com,1433;Initial Catalog=Prueba;User ID=ReadOnly;Password=d*3PSf2MmRX9vJtA5sgwSphCVQ26*T53uU");
-            }
-        }
+        public virtual DbSet<Venta> Ventas { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -127,6 +115,8 @@ namespace Defontana.Infrastructure.Persistence.Context
             {
                 entity.HasKey(e => e.IdVenta)
                     .HasName("PK__Venta__3CD842E5A3F1C767");
+
+                entity.ToTable("Venta");
 
                 entity.Property(e => e.IdVenta).HasColumnName("ID_Venta");
 

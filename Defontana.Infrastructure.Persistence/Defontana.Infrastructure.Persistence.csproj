@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Defontana.Domain\Defontana.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Defontana.Domain.VentasDetalle
+﻿namespace Defontana.Domain.VentaDetalles
 {
     public interface IVentaDetalle
     {

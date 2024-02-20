@@ -1,9 +1,17 @@
-﻿using Defontana.Domain.Ventas;
+﻿using Defontana.Domain.Locales;
+using Defontana.Domain.Marcas;
+using Defontana.Domain.Productos;
+using Defontana.Domain.Ventas;
 
 namespace Defontanta.Application.Ventas
 {
     public interface IVentasLogic
     {
-        Task<Venta> ConsultaTotalDeVentas(int numDays);
+        Task<(long montoTotalVentas, int cantidadVentas)> ConsultaTotalDeVentas();
+        Task<Venta> ConsultaVentaMontoMasAlto();
+        Task<(string codigoProducto, long totalVentas)> ConsultaProductoMasVendido();
+        Task<(Local local, long totalVentas)> ConsultaLocalMayorMontoDeVentas();
+        Task<(Marca marca, decimal margenGanancia)> ConsultaMarcaMayorMargenDeGanancias();
+        Task<(Local local, Producto producto, int CantidadVendido)> ProductoMasVendidoLocal(long IdLocal);
     }
 }
