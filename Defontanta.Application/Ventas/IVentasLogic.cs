@@ -12,6 +12,6 @@ namespace Defontanta.Application.Ventas
         Task<(string codigoProducto, long totalVentas)> ConsultaProductoMasVendido();
         Task<(Local local, long totalVentas)> ConsultaLocalMayorMontoDeVentas();
         Task<(Marca marca, decimal margenGanancia)> ConsultaMarcaMayorMargenDeGanancias();
-        Task<(Local local, Producto producto, int CantidadVendido)> ProductoMasVendidoLocal(long IdLocal);
+        Task<List<ProductoMasVendidoPorLocal>> ProductoMasVendidoLocal();
     }
 }

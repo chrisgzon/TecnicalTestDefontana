@@ -1,6 +1,7 @@
 ﻿using Defontana.Domain.Ventas;
 using Defontana.Infrastructure.Persistence.Context;
 using Defontana.Infrastructure.Persistence.Repositories;
+using Defontanta.Application;
 using Defontanta.Application.Ventas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -93,10 +94,14 @@ public class Application
             Console.WriteLine();
 
             // Cómo obtendrías cuál es el producto que más se vende en cada local
-            var (localProductoMasVendido, productoMasVendido, cantidad) = await _ventasLogic.ProductoMasVendidoLocal(9); // Producto más vendido en el local Antofagasta
+            List<ProductoMasVendidoPorLocal> productosPorLocal = await _ventasLogic.ProductoMasVendidoLocal();
             Console.WriteLine("* Cómo obtendrías cuál es el producto que más se vende en cada local: ");
-            Console.WriteLine($"R: El producto mas vendido para el local {localProductoMasVendido.Nombre}({localProductoMasVendido.IdLocal}) es: {productoMasVendido.Nombre}({productoMasVendido.IdProducto}) Con la cantidad de: {cantidad}");
-            Console.WriteLine();
+            Console.WriteLine("**-------------------------------**-----------------------**--------------------------** ");
+            foreach (ProductoMasVendidoPorLocal localProducto in productosPorLocal)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"R: El producto mas vendido para el local {localProducto.Local.Nombre}({localProducto.Local.IdLocal}) es: {localProducto.Producto.Nombre}({localProducto.Producto.IdProducto}) Con la cantidad de: {localProducto.CantidadVendida}");
+            }
         } catch (Exception ex)
         {
             _logger.LogInformation("Error: {error}", ex.Message);

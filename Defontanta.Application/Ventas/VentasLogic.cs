@@ -81,15 +81,40 @@ namespace Defontanta.Application.Ventas
             return (new Marca { Nombre = marca.Nombre, IdMarca = marca.IdMarca }, marca.Margen);
         }
 
-        public async Task<(Local local, Producto producto, int CantidadVendido)> ProductoMasVendidoLocal(long IdLocal)
+        public async Task<List<ProductoMasVendidoPorLocal>> ProductoMasVendidoLocal()
         {
             await ConsultaVentas();
-            var detallesPorVentas = ventas
-                                    .Where(d => d.Venta.IdLocal == IdLocal)
-                                    .GroupBy(d => new { d.Venta.IdLocal, d.Venta.Local.Nombre, d.IdProducto, NombreProducto = d.Producto.Nombre })
-                                    .Select(g => new { g.Key.IdLocal, g.Key.Nombre, g.Key.IdProducto, g.Key.NombreProducto, CantidadVendido = g.Sum(d => d.Cantidad) });
-            var result = detallesPorVentas.OrderByDescending(v => v.CantidadVendido).First();
-            return (new Local { IdLocal = result.IdLocal, Nombre = result.Nombre }, new Producto { IdProducto = result.IdProducto, Nombre = result.NombreProducto }, result.CantidadVendido);
+            return ventas
+                                    .GroupBy(d => new { d.Venta.IdLocal, d.Venta.Local.Nombre })
+                                    .Select(g => new
+                                    {
+                                        g.Key.IdLocal,
+                                        g.Key.Nombre,
+                                        ProducToMasVendido = g.GroupBy(d => new { d.Producto.Nombre, d.IdProducto })
+                                        .Select(p => new
+                                        {
+                                            p.Key.Nombre,
+                                            p.Key.IdProducto,
+                                            CantidadVendida = p.Sum(d => d.Cantidad)
+                                        })
+                                        .OrderByDescending(l => l.CantidadVendida)
+                                        .First()
+                                    })
+                                    .Select(l => new ProductoMasVendidoPorLocal
+                                    {
+                                        Local = new Local
+                                        {
+                                            Nombre = l.Nombre,
+                                            IdLocal = l.IdLocal
+                                        },
+                                        Producto = new Producto
+                                        {
+                                            Nombre = l.ProducToMasVendido.Nombre,
+                                            IdProducto = l.ProducToMasVendido.IdProducto
+                                        },
+                                        CantidadVendida = l.ProducToMasVendido.CantidadVendida
+                                    })
+                                    .ToList();
         }
     }
 }
